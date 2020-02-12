@@ -4,7 +4,7 @@
 		<parameter name="browser" value="chrome" />
 		<parameter name="environment" value="prod" />
 		<parameter name="version" value="78.0.3904.105" />
-		<parameter name="dataJson" value="BankGuru.json" />
+		<parameter name="dataXml" value="BankGuru.xml" />
 		<classes>
 			<class name="com.bankguru.customer.Register" />
 			<class name="com.bankguru.customer.NewCustomer" />

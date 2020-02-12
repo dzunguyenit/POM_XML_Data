@@ -8,16 +8,15 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import org.w3c.dom.Element;
 
-import com.CommonPages.ManageEnviroment.Environment;
 import com.CommonPages.CommonTestcases;
+import com.CommonPages.ManageEnviroment.Environment;
 import com.bankguru.HomePage;
 import com.bankguru.LoginPage;
 import com.bankguru.NewCustomerPage;
 import com.bankguru.builder.NewCustomerBuilder;
 import com.bankguru.builder.NewCustomerBuilder.Customer.CustomerAccount;
-
-import ObjectPageJson.AbstractObJectJson;
 
 public class NewCustomer extends CommonTestcases {
 	Environment urlEnvironment;
@@ -25,22 +24,21 @@ public class NewCustomer extends CommonTestcases {
 	private LoginPage loginPage;
 	private HomePage homePage;
 	private NewCustomerPage newCustomerPage;
-	AbstractObJectJson data;
-
 	String email;
+	Element data;
 	static String customerId;
-	String pathData = "/data/";
 	String userPath = System.getProperty("user.dir");
 
-	@Parameters({ "browser", "environment", "version", "dataJson" })
+	@Parameters({ "browser", "environment", "version", "dataXml" })
 	@BeforeClass
-	public void beforeClass(String browser, String environment, String version, String dataJson) {
+	public void beforeClass(String browser, String environment, String version, String dataXml) {
 		email = "vu" + randomEmail() + "@gmail.com";
 		ConfigFactory.setProperty("env", environment);
 		urlEnvironment = ConfigFactory.create(Environment.class);
 
-		String pathDataJson = userPath.concat(pathData).concat(dataJson);
-		data = getDataJson(pathDataJson);
+		String pathDataXml = userPath.concat("/data/").concat(dataXml);
+		data = readXmlFile(pathDataXml);
+
 		log.info("----------OPEN BROWSER-----------");
 		driver = openMultiBrowser(browser, urlEnvironment.url(), version);
 		loginPage = PageFactory.initElements(driver, LoginPage.class);
@@ -80,9 +78,9 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Button Tab Name Field");
 		newCustomerPage.pressTabNameField();
 		log.info("New Customer_01 Step 03 - Verify Text Username Error");
-		verifyEquals(data.newCustomer().getNameCannotEmptyMsg(),
+		verifyEquals(getData(data, "nameCannotEmptyMsg"),
 				newCustomerPage.getDynamicMsg("Customer name must not be blank"));
-		Thread.sleep(4000);
+
 		TC_100_NameCannotEmpty();
 
 	}
@@ -90,23 +88,20 @@ public class NewCustomer extends CommonTestcases {
 	@Test
 	public void TC_02_NameCannotBeNumberic() throws InterruptedException {
 		log.info("New Customer_01 Step 02 - Enter Nummeric Name Field");
-		newCustomerPage.enterNummericNameField(data.newCustomer().getNummericValueName());
+		newCustomerPage.enterNummericNameField(getData(data, "nummericValueName"));
 		log.info("New Customer_01 Step 03 - Verify Text Username Error");
-		verifyEquals(data.newCustomer().getNamemustBeNumbericMsg(),
-				newCustomerPage.getDynamicMsg("Numbers are not allowed"));
-		Thread.sleep(4000);
-		TC_101_NameCannotEmpty();
+		verifyEquals(getData(data, "cannotBeNumbericMsg"), newCustomerPage.getDynamicMsg("Numbers are not allowed"));
 
 	}
 
 	@Test
 	public void TC_03_NameCannotHaveSpecialCharacter() throws InterruptedException {
 		log.info("New Customer_01 Step 02 - Enter Special Character Name Field");
-		newCustomerPage.enterSpecialCharacterNameField(data.newCustomer().getSpecialCharacterName());
+		newCustomerPage.enterSpecialCharacterNameField(getData(data, "specialCharacterName"));
 		log.info("New Customer_01 Step 03 - Verify Text Username Error");
-		verifyEquals(data.newCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				newCustomerPage.getDynamicMsg("Special characters are not allowed"));
-		Thread.sleep(4000);
+
 		TC_101_NameCannotEmpty();
 	}
 
@@ -115,9 +110,9 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Space Character Name Field");
 		newCustomerPage.pressSpaceNameField();
 		log.info("New Customer_01 Step 03 - Verify Text Username Error");
-		verifyEquals(data.newCustomer().getFirstCharacterBlankSpaceMsg(),
+		verifyEquals(getData(data, "firstCharacterBlankSpaceMsg"),
 				newCustomerPage.getDynamicMsg("First character can not have space"));
-		Thread.sleep(4000);
+
 		TC_102_NameCannotEmpty();
 	}
 
@@ -126,10 +121,9 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Button Tab Addres sField");
 		newCustomerPage.pressTabAddressField();
 		log.info("New Customer_01 Step 03 - Verify Text Address Error");
-		verifyEquals(data.newCustomer().getAddressCannotEmptyMsg(),
+		verifyEquals(getData(data, "addressCannotEmptyMsg"),
 				newCustomerPage.getDynamicMsg("Address Field must not be blank"));
 
-		Thread.sleep(4000);
 		TC_102_NameCannotEmpty();
 
 	}
@@ -139,7 +133,7 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Space Address Field");
 		newCustomerPage.pressSpaceAddressField();
 		log.info("New Customer_01 Step 03 - Verify Text Address Error");
-		verifyEquals(data.newCustomer().getFirstCharacterBlankSpaceMsg(),
+		verifyEquals(getData(data, "cannotFirstCharacterBlankSpaceMsg"),
 				newCustomerPage.getDynamicMsg("First character can not have space"));
 
 	}
@@ -149,7 +143,7 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Button Tab City Field");
 		newCustomerPage.pressTabCityField();
 		log.info("New Customer_01 Step 03 - Verify Text City Error");
-		verifyEquals(data.newCustomer().getCityCannotEmptyMsg(),
+		verifyEquals(getData(data, "cityCannotEmptyMsg"),
 				newCustomerPage.getDynamicMsg("City Field must not be blank"));
 
 	}
@@ -157,19 +151,18 @@ public class NewCustomer extends CommonTestcases {
 	@Test
 	public void TC_08_CityCannotBeNumberic() {
 		log.info("New Customer_01 Step 02 - Enter Nummeric City Field");
-		newCustomerPage.enterNummericCityField(data.newCustomer().getNummericValueCity());
+		newCustomerPage.enterNummericCityField(getData(data, "nummericValueCity"));
 		log.info("New Customer_01 Step 03 - Verify Text City Error");
-		verifyEquals(data.newCustomer().getCannotBeNumbericMsg(),
-				newCustomerPage.getDynamicMsg("Numbers are not allowed"));
+		verifyEquals(getData(data, "cannotBeNumbericMsg"), newCustomerPage.getDynamicMsg("Numbers are not allowed"));
 
 	}
 
 	@Test
 	public void TC_09_NameCannotHaveSpecialCharacter() {
 		log.info("New Customer_01 Step 02 - Enter Special Character City Field");
-		newCustomerPage.enterSpecialCharacterCityField(data.newCustomer().getSpecialCharacterCity());
+		newCustomerPage.enterSpecialCharacterCityField(getData(data, "specialCharacterCityUpdate"));
 		log.info("New Customer_01 Step 03 - Verify Text City Error");
-		verifyEquals(data.newCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				newCustomerPage.getDynamicMsg("Special characters are not allowed"));
 
 	}
@@ -179,7 +172,7 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Space Address Field");
 		newCustomerPage.pressSpaceAddressField();
 		log.info("New Customer_01 Step 03 - Verify Text Address Error");
-		verifyEquals(data.newCustomer().getFirstCharacterBlankSpaceMsg(),
+		verifyEquals(getData(data, "cannotFirstCharacterBlankSpaceMsg"),
 				newCustomerPage.getDynamicMsg("First character can not have space"));
 
 	}
@@ -189,27 +182,25 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Tab State Field");
 		newCustomerPage.pressTabStateField();
 		log.info("New Customer_01 Step 03 - Verify Text State Error");
-		verifyEquals(data.newCustomer().getStateCannotEmptyMsg(),
-				newCustomerPage.getDynamicMsg("State must not be blank"));
+		verifyEquals(getData(data, "stateCannotEmptyMsg"), newCustomerPage.getDynamicMsg("State must not be blank"));
 
 	}
 
 	@Test
 	public void TC_12_StateCannotBeNumberic() {
 		log.info("New Customer_01 Step 02 - Enter Nummeric State Field");
-		newCustomerPage.enterNummericStateField(data.newCustomer().getNummericValueState());
+		newCustomerPage.enterNummericStateField(getData(data, "nummericValueState"));
 		log.info("New Customer_01 Step 03 - Verify Text State Error");
-		verifyEquals(data.newCustomer().getCannotBeNumbericMsg(),
-				newCustomerPage.getDynamicMsg("Numbers are not allowed"));
+		verifyEquals(getData(data, "cannotBeNumbericMsg"), newCustomerPage.getDynamicMsg("Numbers are not allowed"));
 
 	}
 
 	@Test
 	public void TC_13_StateCannotHaveSpecialCharacter() {
 		log.info("New Customer_01 Step 02 - Enter Special Character State Field");
-		newCustomerPage.enterSpecialCharacterStateField(data.newCustomer().getSpecialCharacterState());
+		newCustomerPage.enterSpecialCharacterStateField(getData(data, "specialCharacterState"));
 		log.info("New Customer_01 Step 03 - Verify Text State Error");
-		verifyEquals(data.newCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				newCustomerPage.getDynamicMsg("Special characters are not allowed"));
 
 	}
@@ -219,7 +210,7 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Space State Field");
 		newCustomerPage.pressSpaceStateField();
 		log.info("New Customer_01 Step 03 - Verify Text State Error");
-		verifyEquals(data.newCustomer().getFirstCharacterBlankSpaceMsg(),
+		verifyEquals(getData(data, "firstCharacterBlankSpaceMsg"),
 				newCustomerPage.getDynamicMsg("First character can not have space"));
 
 	}
@@ -227,10 +218,9 @@ public class NewCustomer extends CommonTestcases {
 	@Test
 	public void TC_15_PinMustBeNumeric() {
 		log.info("New Customer_01 Step 02 - Enter Char Pin Field");
-		newCustomerPage.enterCharPinField(data.newCustomer().getCharValueState());
+		newCustomerPage.enterCharPinField(getData(data, "CharValueState"));
 		log.info("New Customer_01 Step 03 - Verify Text Pin Error");
-		verifyEquals(data.newCustomer().getMustBeNumbericMsg(),
-				newCustomerPage.getDynamicMsg("Characters are not allowed"));
+		verifyEquals(getData(data, "mustBeNumbericMsg"), newCustomerPage.getDynamicMsg("Characters are not allowed"));
 
 	}
 
@@ -239,17 +229,16 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Tab Pin Field");
 		newCustomerPage.pressTabPinField();
 		log.info("New Customer_01 Step 03 - Verify Text Pin Error");
-		verifyEquals(data.newCustomer().getPinCannotEmptyMsg(),
-				newCustomerPage.getDynamicMsg("PIN Code must not be blank"));
+		verifyEquals(getData(data, "pinCannotEmptyMsg"), newCustomerPage.getDynamicMsg("PIN Code must not be blank"));
 
 	}
 
 	@Test
 	public void TC_17_PinMustHave6Digits() {
 		log.info("New Customer_01 Step 02 - Enter Digit");
-		newCustomerPage.enterDigit(data.newCustomer().getDigit());
+		newCustomerPage.enterDigit(getData(data, "digit"));
 		log.info("New Customer_01 Step 03 - Verify Text Pin Error");
-		verifyEquals(data.newCustomer().getPinMustHave6DigitsMsg(),
+		verifyEquals(getData(data, "pinMustHave6DigitsMsg"),
 				newCustomerPage.getDynamicMsg("PIN Code must have 6 Digits"));
 
 	}
@@ -257,9 +246,9 @@ public class NewCustomer extends CommonTestcases {
 	@Test
 	public void TC_18_PinCannotHaveSpecialCharacter() {
 		log.info("New Customer_01 Step 02 - Enter Special Character Pin Field");
-		newCustomerPage.enterSpecialCharacterPinField(data.newCustomer().getSpecialCharacterPin());
+		newCustomerPage.enterSpecialCharacterPinField(getData(data, "specialCharacterPin"));
 		log.info("New Customer_01 Step 03 - Verify Text Pin Error");
-		verifyEquals(data.newCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				newCustomerPage.getDynamicMsg("Special characters are not allowed"));
 
 	}
@@ -269,7 +258,7 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Space Pin Field");
 		newCustomerPage.pressSpacePinField();
 		log.info("New Customer_01 Step 03 - Verify Text Pin Error");
-		verifyEquals(data.newCustomer().getFirstCharacterBlankSpaceMsg(),
+		verifyEquals(getData(data, "firstCharacterBlankSpaceMsg"),
 				newCustomerPage.getDynamicMsg("First character can not have space"));
 
 	}
@@ -277,10 +266,9 @@ public class NewCustomer extends CommonTestcases {
 	@Test
 	public void TC_20_PinCannotHaveBlankSpace() {
 		log.info("New Customer_01 Step 02 - Enter Blank Space Pin Field");
-		newCustomerPage.enterBlankSpacePinField(data.newCustomer().getPinBlankSpace());
+		newCustomerPage.enterBlankSpacePinField(getData(data, "pinBlankSpace"));
 		log.info("New Customer_01 Step 03 - Verify Text Pin Error");
-		verifyEquals(data.newCustomer().getMustBeNumbericMsg(),
-				newCustomerPage.getDynamicMsg("Characters are not allowed"));
+		verifyEquals(getData(data, "mustBeNumbericMsg"), newCustomerPage.getDynamicMsg("Characters are not allowed"));
 
 	}
 
@@ -289,7 +277,7 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Tab Telephone Field");
 		newCustomerPage.pressTabTelephoneField();
 		log.info("New Customer_01 Step 03 - Verify Text Telephone Error");
-		verifyEquals(data.newCustomer().getTelephoneCannotEmptyMsg(),
+		verifyEquals(getData(data, "telephoneCannotEmptyMsg"),
 				newCustomerPage.getDynamicMsg("Mobile no must not be blank"));
 
 	}
@@ -299,7 +287,7 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Space TelePhone Field");
 		newCustomerPage.pressSpaceTelePhoneField();
 		log.info("New Customer_01 Step 03 - Verify Text Telephone Error");
-		verifyEquals(data.newCustomer().getFirstCharacterBlankSpaceMsg(),
+		verifyEquals(getData(data, "firstCharacterBlankSpaceMsg"),
 				newCustomerPage.getDynamicMsg("First character can not have space"));
 
 	}
@@ -307,19 +295,18 @@ public class NewCustomer extends CommonTestcases {
 	@Test
 	public void TC_23_TelephoneCannotHaveBlankSpace() {
 		log.info("New Customer_01 Step 02 - Enter Blank Space Telephone Field");
-		newCustomerPage.enterBlankSpaceTelephoneField(data.newCustomer().getTelephoneBlankSpace());
+		newCustomerPage.enterBlankSpaceTelephoneField(getData(data, "telephoneBlankSpace"));
 		log.info("New Customer_01 Step 03 - Verify Text Telephone Error");
-		verifyEquals(data.newCustomer().getMustBeNumbericMsg(),
-				newCustomerPage.getDynamicMsg("Characters are not allowed"));
+		verifyEquals(getData(data, "mustBeNumbericMsg"), newCustomerPage.getDynamicMsg("Characters are not allowed"));
 
 	}
 
 	@Test
 	public void TC_24_TelephoneCannotHaveSpecialCharacter() {
 		log.info("New Customer_01 Step 02 - Enter Special Character TelePhone Field");
-		newCustomerPage.enterSpecialCharacterTelePhoneField(data.newCustomer().getSpecialCharacterTelephone());
+		newCustomerPage.enterSpecialCharacterTelePhoneField(getData(data, "specialCharacterTelephone"));
 		log.info("New Customer_01 Step 03 - Verify Text Telephone Error");
-		verifyEquals(data.newCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				newCustomerPage.getDynamicMsg("Special characters are not allowed"));
 
 	}
@@ -329,18 +316,16 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Emaile Field");
 		newCustomerPage.pressEmaileField();
 		log.info("New Customer_01 Step 03 - Verify Text Email Error");
-		verifyEquals(data.newCustomer().getEmailCannotEmptyMsg(),
-				newCustomerPage.getDynamicMsg("Email-ID must not be blank"));
+		verifyEquals(getData(data, "emailCannotEmptyMsg"), newCustomerPage.getDynamicMsg("Email-ID must not be blank"));
 
 	}
 
 	@Test
 	public void TC_26_EmailIncorrectFormat() {
 		log.info("New Customer_01 Step 02 - Enter Incorrect Email");
-		newCustomerPage.enterIncorrectEmail(data.newCustomer().getIncorrectEmail());
+		newCustomerPage.enterIncorrectEmail(getData(data, "incorrectEmail"));
 		log.info("New Customer_01 Step 03 - Verify Text Email Error");
-		verifyEquals(data.newCustomer().getEmailIncorrectFormatMsg(),
-				newCustomerPage.getDynamicMsg("Email-ID is not valid"));
+		verifyEquals(getData(data, "emailIncorrectFormatMsg"), newCustomerPage.getDynamicMsg("Email-ID is not valid"));
 
 	}
 
@@ -349,7 +334,7 @@ public class NewCustomer extends CommonTestcases {
 		log.info("New Customer_01 Step 02 - Press Space Email Field");
 		newCustomerPage.pressSpaceEmailField();
 		log.info("New Customer_01 Step 03 - Verify Text Email Error");
-		verifyEquals(data.newCustomer().getFirstCharacterBlankSpaceMsg(),
+		verifyEquals(getData(data, "firstCharacterBlankSpaceMsg"),
 				newCustomerPage.getDynamicMsg("First character can not have space"));
 
 	}
@@ -357,17 +342,15 @@ public class NewCustomer extends CommonTestcases {
 	@Test
 	public void TC_28_CreateCustomerSuccessfully() {
 		CustomerAccount customerAccount = new NewCustomerBuilder.Customer()
-				.withCustomerName(data.editCustomer().getCustomerName())
-				.withDateOfBirth(data.editCustomer().getDateOfBirth()).withAddress(data.editCustomer().getAddress())
-				.withCity(data.editCustomer().getCity()).withState(data.editCustomer().getState())
-				.withPin(data.editCustomer().getPIN()).withMobileNumber(data.editCustomer().getMobileNumber())
-				.withEmail(email).withPassword(data.editCustomer().getPasswordCustomer()).build();
+				.withCustomerName(getData(data, "customerName")).withDateOfBirth(getData(data, "dateOfBirth"))
+				.withAddress(getData(data, "address")).withCity(getData(data, "city")).withState(getData(data, "state"))
+				.withPin(getData(data, "PIN")).withMobileNumber(getData(data, "mobileNumber")).withEmail(email)
+				.withPassword(getData(data, "passwordCustomer")).build();
 
 		newCustomerPage.inputAllFields(customerAccount);
 		newCustomerPage.clickSubmit();
 
-		verifyEquals(data.editCustomer().getRegisterSuccessfullyMsg(),
-				newCustomerPage.getTextMessageCreateCustomerSucces());
+		verifyEquals(getData(data, "registerSuccessfullyMsg"), newCustomerPage.getTextMessageCreateCustomerSucces());
 		customerId = newCustomerPage.getTextUserID();
 
 	}

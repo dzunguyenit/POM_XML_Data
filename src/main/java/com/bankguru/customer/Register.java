@@ -8,29 +8,26 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.CommonPages.ManageEnviroment.Environment;
 import com.CommonPages.CommonTestcases;
+import com.CommonPages.ManageEnviroment.Environment;
 import com.bankguru.HomePage;
 import com.bankguru.LoginPage;
 import com.bankguru.RegisterPage;
-
-import ObjectPageJson.AbstractObJectJson;
 
 public class Register extends CommonTestcases {
 	WebDriver driver;
 	LoginPage loginPage;
 	RegisterPage registerPage;
 	HomePage homePage;
-	AbstractObJectJson data;
 	Environment urlEnvironment;
 	String userPath = System.getProperty("user.dir");
 
 	String email;
 	static String emailLogin, passwordLogin;
 
-	@Parameters({ "browser", "environment", "version", "dataJson" })
+	@Parameters({ "browser", "environment", "version" })
 	@BeforeClass
-	public void beforeClass(String browser, String environment, String version, String dataJson) {
+	public void beforeClass(String browser, String environment, String version) {
 
 		ConfigFactory.setProperty("env", environment);
 		urlEnvironment = ConfigFactory.create(Environment.class);

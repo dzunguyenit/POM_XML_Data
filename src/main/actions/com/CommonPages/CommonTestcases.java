@@ -1,11 +1,13 @@
 package com.CommonPages;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,10 +17,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.testng.Assert;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import com.google.gson.Gson;
-
-import ObjectPageJson.AbstractObJectJson;
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import io.github.bonigarcia.wdm.FirefoxDriverManager;
 import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
@@ -56,27 +59,40 @@ public class CommonTestcases {
 		return ExtentEmail.toString();
 	}
 
-	public AbstractObJectJson getDataJson(String JsonFile) {
-		String json = readFile(JsonFile);
-		return new Gson().fromJson(json, AbstractObJectJson.class);
-	}
-
-	public String readFile(String filename) {
-		String result = "";
+	public static Element readXmlFile(String pathFileXml) {
+		Element nodeElement = null;
 		try {
-			@SuppressWarnings("resource")
-			BufferedReader br = new BufferedReader(new FileReader(filename));
-			StringBuilder sb = new StringBuilder();
-			String line = br.readLine();
-			while (line != null) {
-				sb.append(line);
-				line = br.readLine();
+
+			File xmlFile = new File(pathFileXml);
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(xmlFile);
+
+			doc.getDocumentElement().normalize();
+
+			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+
+			NodeList nList = doc.getChildNodes();
+
+			System.out.println("----------------------------");
+
+			for (int i = 0; i < nList.getLength(); i++) {
+
+				Node nNode = nList.item(i);
+
+				System.out.println("\nCurrent Element : " + nNode.getNodeName());
+				nodeElement = (Element) nNode;
+
 			}
-			result = sb.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return result;
+		return nodeElement;
+	}
+
+	public static String getData(Element nodeElement, String value) {
+		return nodeElement.getElementsByTagName(value).item(0).getTextContent().trim();
+
 	}
 
 	public String randomEmail() {

@@ -3,12 +3,91 @@
 	<!-- NewCustomer -->
 	<nummericValueName>123456</nummericValueName>
 	<specialCharacterName>name!@#</specialCharacterName>
-	<nummericValueCity>mkyong</nummericValueCity>
+	<nummericValueCity>1234</nummericValueCity>
 	<specialCharacterCity>!@#</specialCharacterCity>
-	
+	<nummericValueState>4567</nummericValueState>
+	<specialCharacterState>!@#**</specialCharacterState>
+	<CharValueState>ABC</CharValueState>
+	<digit>123</digit>
+	<specialCharacterPin>@#</specialCharacterPin>
+	<pinBlankSpace>12 345</pinBlankSpace>
+	<specialCharacterTelephone>@#98</specialCharacterTelephone>
+	<telephoneBlankSpace>012 11122</telephoneBlankSpace>
+	<incorrectEmail>Guru99@</incorrectEmail>
+	<nameCannotEmptyMsg>Customer name must not be blank
+	</nameCannotEmptyMsg>
+	<cannotBeNumbericMsg>Numbers are not allowed</cannotBeNumbericMsg>
+	<cannotSpecialCharacterMsg>Special characters are not allowed
+	</cannotSpecialCharacterMsg>
+	<firstCharacterBlankSpaceMsg>First character can not have space
+	</firstCharacterBlankSpaceMsg>
+	<mustBeNumbericMsg>Characters are not allowed</mustBeNumbericMsg>
+	<namemustBeNumbericMsg>012 11122</namemustBeNumbericMsg>
+	<telephoneBlankSpace>Numbers are not allowed</telephoneBlankSpace>
+	<cityCannotEmptyMsg>City Field must not be blank</cityCannotEmptyMsg>
+	<addressCannotEmptyMsg>Address Field must not be blank
+	</addressCannotEmptyMsg>
+	<stateCannotEmptyMsg>State must not be blank</stateCannotEmptyMsg>
+	<pinCannotEmptyMsg>PIN Code must not be blank</pinCannotEmptyMsg>
+	<pinMustHave6DigitsMsg>PIN Code must have 6 Digits
+	</pinMustHave6DigitsMsg>
+	<telephoneCannotEmptyMsg>Mobile no must not be blank
+	</telephoneCannotEmptyMsg>
+	<emailCannotEmptyMsg>Email-ID must not be blank</emailCannotEmptyMsg>
+	<emailIncorrectFormatMsg>Email-ID is not valid
+	</emailIncorrectFormatMsg>
+
+	<!-- NewCustomer -->
+
+	<!-- =============================================================== -->
+
 	<!-- EditCustomer -->
 	<customerName>AUTOMATION TESTING</customerName>
 	<dateOfBirth>01/01/1989</dateOfBirth>
 	<address>PO Box 911 8331 Duis Avenue</address>
 	<city>Tampa</city>
+	<state>FL</state>
+	<PIN>466250</PIN>
+	<mobileNumber>4555442476</mobileNumber>
+	<passwordCustomer>automation</passwordCustomer>
+	<registerSuccessfullyMsg>Customer Registered Successfully!!!
+	</registerSuccessfullyMsg>
+	<requireIdMsg>Customer ID is required</requireIdMsg>
+	<nummericValueIdCustomer>1236Acc</nummericValueIdCustomer>
+	<specialCharacterCustomerId>^%$^</specialCharacterCustomerId>
+	<nummericCityField>city123</nummericCityField>
+	<specialCharacterCityUpdate>*^##</specialCharacterCityUpdate>
+	<nummericStateField>1234</nummericStateField>
+	<specialCharacterStateUpdate>*^#</specialCharacterStateUpdate>
+	<pinNumberic>PIN123</pinNumberic>
+	<digitUpdate>321</digitUpdate>
+	<specialCharacterPinUpdate>@@@</specialCharacterPinUpdate>
+	<specialCharacterTelephoneUpdate>8877@@@
+	</specialCharacterTelephoneUpdate>
+	<invalidEmail>Guru99@</invalidEmail>
+	<cannotBeNumbericMsg>Numbers are not allowed</cannotBeNumbericMsg>
+	<cannotSpecialCharacterMsg>Special characters are not allowed
+	</cannotSpecialCharacterMsg>
+	<urlEditCustomer>http://demo.guru99.com/v4/manager/editCustomerPage.php
+	</urlEditCustomer>
+	<cannotFirstCharacterBlankSpaceMsg>First character can not have space
+	</cannotFirstCharacterBlankSpaceMsg>
+	<mustBeNumbericMsg>Characters are not allowed</mustBeNumbericMsg>
+	<cityCannotEmptyMsg>City Field must not be blank</cityCannotEmptyMsg>
+	<addressCannotEmptyMsg>Address Field must not be blank
+	</addressCannotEmptyMsg>
+	<stateCannotEmptyMsg>State must not be blank</stateCannotEmptyMsg>
+	<pinCannotEmptyMsg>PIN Code must not be blank</pinCannotEmptyMsg>
+	<pinMustHave6DigitsMsg>PIN Code must have 6 Digits
+	</pinMustHave6DigitsMsg>
+	<telephoneCannotEmptyMsg>Mobile no must not be blank
+	</telephoneCannotEmptyMsg>
+	<emailCannotEmptyMsg>Email-ID must not be blank</emailCannotEmptyMsg>
+	<emailIncorrectFormatMsg>Email-ID is not valid
+	</emailIncorrectFormatMsg>
+
+	<!-- =============================================================== -->
+
+	<!-- EditCustomer -->
+
 </Customer>

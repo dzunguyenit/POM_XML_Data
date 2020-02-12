@@ -8,14 +8,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import org.w3c.dom.Element;
 
-import com.CommonPages.ManageEnviroment.Environment;
 import com.CommonPages.CommonTestcases;
+import com.CommonPages.ManageEnviroment.Environment;
 import com.bankguru.EditCustomerPage;
 import com.bankguru.HomePage;
 import com.bankguru.LoginPage;
-
-import ObjectPageJson.AbstractObJectJson;
 
 public class EditCustomer extends CommonTestcases {
 	Environment urlEnvironment;
@@ -23,19 +22,18 @@ public class EditCustomer extends CommonTestcases {
 	private LoginPage loginPage;
 	private HomePage homePage;
 	private EditCustomerPage editCustomerPage;
-	AbstractObJectJson data;
-	String pathData = "/data/";
+	Element data;
 	String userPath = System.getProperty("user.dir");
 
-	@Parameters({ "browser", "environment", "version", "dataJson" })
+	@Parameters({ "browser", "environment", "version", "dataXml" })
 	@BeforeClass
-	public void beforeClass(String browser, String environment, String version, String dataJson) {
+	public void beforeClass(String browser, String environment, String version, String dataXml) {
 
 		ConfigFactory.setProperty("env", environment);
 		urlEnvironment = ConfigFactory.create(Environment.class);
 
-		String pathDataJson = userPath.concat(pathData).concat(dataJson);
-		data = getDataJson(pathDataJson);
+		String pathDataXml = userPath.concat("/data/").concat(dataXml);
+		data = readXmlFile(pathDataXml);
 		log.info("----------OPEN BROWSER-----------");
 		driver = openMultiBrowser(browser, urlEnvironment.url(), version);
 		loginPage = PageFactory.initElements(driver, LoginPage.class);
@@ -58,26 +56,25 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 02 - Press Tab CustomerId Field");
 		editCustomerPage.pressTabCustomerIdField();
 		log.info("Edit Customer_01 Step 03 - Verify Text Error CustomerID");
-		verifyEquals(data.editCustomer().getRequireIdMsg(), editCustomerPage.getDynamicMsg("Customer ID is required"));
+		verifyEquals(getData(data, "requireIdMsg"), editCustomerPage.getDynamicMsg("Customer ID is required"));
 
 	}
 
 	@Test
 	public void TC_02_CustomerIdCannotBeNumberic() {
 		log.info("Edit Customer_01 Step 02 - Enter Nummeric CustomerId Field");
-		editCustomerPage.enterNummericCustomerIdField(data.editCustomer().getNummericValueIdCustomer());
+		editCustomerPage.enterNummericCustomerIdField(getData(data, "nummericValueIdCustomer"));
 		log.info("Edit Customer_01 Step 03 - Verify Text Error CustomerID");
-		verifyEquals(data.editCustomer().getMustBeNumbericMsg(),
-				editCustomerPage.getDynamicMsg("Characters are not allowed"));
+		verifyEquals(getData(data, "mustBeNumbericMsg"), editCustomerPage.getDynamicMsg("Characters are not allowed"));
 
 	}
 
 	@Test
 	public void TC_03_CustomerIdCannotHaveSpecialCharacter() {
 		log.info("Edit Customer_01 Step 02 - Enter Special Character CustomerId Field");
-		editCustomerPage.enterSpecialCharacterCustomerIdField(data.editCustomer().getSpecialCharacterCustomerId());
+		editCustomerPage.enterSpecialCharacterCustomerIdField(getData(data, "specialCharacterCustomerId"));
 		log.info("Edit Customer_01 Step 03 - Verify Text Error CustomerID");
-		verifyEquals(data.editCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				editCustomerPage.getDynamicMsg("Special characters are not allowed"));
 	}
 
@@ -88,7 +85,7 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Verify Navigate Edit Customer");
-		verifyEquals(data.editCustomer().getUrlEditCustomer(), editCustomerPage.getUrlEditCustomer());
+		verifyEquals(getData(data, "urlEditCustomer"), editCustomerPage.getUrlEditCustomer());
 	}
 
 	// Testcas 05, 06, 07: Skip
@@ -138,7 +135,7 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 04 - Press Tab Addres sField");
 		editCustomerPage.pressTabAddressField();
 		log.info("Edit Customer_01 Step 05 - Verify Text Address Error");
-		verifyEquals(data.editCustomer().getAddressCannotEmptyMsg(),
+		verifyEquals(getData(data, "addressCannotEmptyMsg"),
 				editCustomerPage.getDynamicMsg("Address Field must not be blank"));
 
 	}
@@ -152,7 +149,7 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 04 - Press Tab City Field");
 		editCustomerPage.pressTabCityField();
 		log.info("Edit Customer_01 Step 05 - Verify Text City Error");
-		verifyEquals(data.editCustomer().getCityCannotEmptyMsg(),
+		verifyEquals(getData(data, "cityCannotEmptyMsg"),
 				editCustomerPage.getDynamicMsg("City Field must not be blank"));
 	}
 
@@ -163,10 +160,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Nummeric City Field");
-		editCustomerPage.enterNummericCityField(data.editCustomer().getNummericCityField());
+		editCustomerPage.enterNummericCityField(getData(data, "nummericCityField"));
 		log.info("Edit Customer_01 Step 05 - Verify Text City Error");
-		verifyEquals(data.editCustomer().getCannotBeNumbericMsg(),
-				editCustomerPage.getDynamicMsg("Numbers are not allowed"));
+		verifyEquals(getData(data, "cannotBeNumbericMsg"), editCustomerPage.getDynamicMsg("Numbers are not allowed"));
 	}
 
 	@Test
@@ -176,9 +172,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Special Character City Field");
-		editCustomerPage.enterSpecialCharacterCityField(data.editCustomer().getSpecialCharacterCityUpdate());
+		editCustomerPage.enterSpecialCharacterCityField(getData(data, "specialCharacterCityUpdate"));
 		log.info("Edit Customer_01 Step 05 - Verify Text City Error");
-		verifyEquals(data.editCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				editCustomerPage.getDynamicMsg("Special characters are not allowed"));
 	}
 
@@ -191,8 +187,7 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 04 - Press Tab State Field");
 		editCustomerPage.pressTabStateField();
 		log.info("Edit Customer_01 Step 05 - Verify Text State Error");
-		verifyEquals(data.editCustomer().getStateCannotEmptyMsg(),
-				editCustomerPage.getDynamicMsg("State must not be blank"));
+		verifyEquals(getData(data, "stateCannotEmptyMsg"), editCustomerPage.getDynamicMsg("State must not be blank"));
 	}
 
 	@Test
@@ -202,10 +197,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Nummeric State Field");
-		editCustomerPage.enterNummericStateField(data.editCustomer().getNummericStateField());
+		editCustomerPage.enterNummericStateField(getData(data, "nummericStateField"));
 		log.info("Edit Customer_01 Step 05 - Verify Text State Error");
-		verifyEquals(data.editCustomer().getCannotBeNumbericMsg(),
-				editCustomerPage.getDynamicMsg("Numbers are not allowed"));
+		verifyEquals(getData(data, "cannotBeNumbericMsg"), editCustomerPage.getDynamicMsg("Numbers are not allowed"));
 	}
 
 	@Test
@@ -215,9 +209,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Special Character State Field");
-		editCustomerPage.enterSpecialCharacterStateField(data.editCustomer().getSpecialCharacterStateUpdate());
+		editCustomerPage.enterSpecialCharacterStateField(getData(data, "specialCharacterStateUpdate"));
 		log.info("Edit Customer_01 Step 05 - Verify Text State Error");
-		verifyEquals(data.editCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				editCustomerPage.getDynamicMsg("Special characters are not allowed"));
 	}
 
@@ -228,10 +222,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Char Pin Field");
-		editCustomerPage.enterCharPinField(data.editCustomer().getPinNumberic());
+		editCustomerPage.enterCharPinField(getData(data, "pinNumberic"));
 		log.info("Edit Customer_01 Step 05 - Verify Text Pin Error");
-		verifyEquals(data.editCustomer().getMustBeNumbericMsg(),
-				editCustomerPage.getDynamicMsg("Characters are not allowed"));
+		verifyEquals(getData(data, "mustBeNumbericMsg"), editCustomerPage.getDynamicMsg("Characters are not allowed"));
 	}
 
 	@Test
@@ -243,8 +236,7 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 04 - Press Tab Pin Field");
 		editCustomerPage.pressTabPinField();
 		log.info("Edit Customer_01 Step 05 - Verify Text Pin Error");
-		verifyEquals(data.editCustomer().getPinCannotEmptyMsg(),
-				editCustomerPage.getDynamicMsg("PIN Code must not be blank"));
+		verifyEquals(getData(data, "pinCannotEmptyMsg"), editCustomerPage.getDynamicMsg("PIN Code must not be blank"));
 	}
 
 	@Test
@@ -254,9 +246,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Digit");
-		editCustomerPage.enterDigit(data.editCustomer().getDigitUpdate());
+		editCustomerPage.enterDigit(getData(data, "digitUpdate"));
 		log.info("Edit Customer_01 Step 05 - Verify Text Pin Error");
-		verifyEquals(data.editCustomer().getPinMustHave6DigitsMsg(),
+		verifyEquals(getData(data, "pinMustHave6DigitsMsg"),
 				editCustomerPage.getDynamicMsg("PIN Code must have 6 Digits"));
 	}
 
@@ -267,9 +259,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Special Character Pin Field");
-		editCustomerPage.enterSpecialCharacterPinField(data.editCustomer().getSpecialCharacterPinUpdate());
+		editCustomerPage.enterSpecialCharacterPinField(getData(data, "specialCharacterPinUpdate"));
 		log.info("Edit Customer_01 Step 05 - Verify Text Pin Error");
-		verifyEquals(data.editCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				editCustomerPage.getDynamicMsg("Special characters are not allowed"));
 	}
 
@@ -282,7 +274,7 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 04 - Press Tab Telephone Field");
 		editCustomerPage.pressTabTelephoneField();
 		log.info("Edit Customer_01 Step 05 - Verify Text Telephone Error");
-		verifyEquals(data.editCustomer().getTelephoneCannotEmptyMsg(),
+		verifyEquals(getData(data, "telephoneCannotEmptyMsg"),
 				editCustomerPage.getDynamicMsg("Mobile no must not be blank"));
 	}
 
@@ -293,9 +285,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Special Character Telephone Field");
-		editCustomerPage.enterSpecialCharacterTelephoneField(data.editCustomer().getSpecialCharacterTelephoneUpdate());
+		editCustomerPage.enterSpecialCharacterTelephoneField(getData(data, "specialCharacterTelephoneUpdate"));
 		log.info("Edit Customer_01 Step 05 - Verify Text Telephone Error");
-		verifyEquals(data.editCustomer().getCannotSpecialCharacterMsg(),
+		verifyEquals(getData(data, "cannotSpecialCharacterMsg"),
 				editCustomerPage.getDynamicMsg("Special characters are not allowed"));
 	}
 
@@ -308,8 +300,7 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 04 - Press Tab Email Field");
 		editCustomerPage.pressTabEmailField();
 		log.info("Edit Customer_01 Step 05 - Verify Text Email Error");
-		verifyEquals(data.editCustomer().getEmailCannotEmptyMsg(),
-				editCustomerPage.getDynamicMsg("Email-ID must not be blank"));
+		verifyEquals(getData(data, "emailCannotEmptyMsg"), editCustomerPage.getDynamicMsg("Email-ID must not be blank"));
 	}
 
 	@Test
@@ -319,10 +310,9 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 03 - Click Submit To EditInfor");
 		editCustomerPage.clickSubmitToEditInfor();
 		log.info("Edit Customer_01 Step 04 - Enter Invalid Email");
-		editCustomerPage.enterInvalidEmail(data.editCustomer().getInvalidEmail());
+		editCustomerPage.enterInvalidEmail(getData(data, "invalidEmail"));
 		log.info("Edit Customer_01 Step 05 - Verify Text Email Error");
-		verifyEquals(data.editCustomer().getEmailIncorrectFormatMsg(),
-				editCustomerPage.getDynamicMsg("Email-ID is not valid"));
+		verifyEquals(getData(data, "emailIncorrectFormatMsg"), editCustomerPage.getDynamicMsg("Email-ID is not valid"));
 	}
 
 	@Test
@@ -334,7 +324,7 @@ public class EditCustomer extends CommonTestcases {
 		log.info("Edit Customer_01 Step 04 - Press Space Email Field");
 		editCustomerPage.pressSpaceEmailField();
 		log.info("Edit Customer_01 Step 05 - Verify Text Email Error");
-		verifyEquals(data.editCustomer().getCannotFirstCharacterBlankSpaceMsg(),
+		verifyEquals(getData(data, "cannotFirstCharacterBlankSpaceMsg"),
 				editCustomerPage.getDynamicMsg("First character can not have space"));
 	}
 
