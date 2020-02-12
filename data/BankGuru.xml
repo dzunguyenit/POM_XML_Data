@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Customer>
+	<!-- NewCustomer -->
+	<nummericValueName>123456</nummericValueName>
+	<specialCharacterName>name!@#</specialCharacterName>
+	<nummericValueCity>mkyong</nummericValueCity>
+	<specialCharacterCity>!@#</specialCharacterCity>
+	
+	<!-- EditCustomer -->
+	<customerName>AUTOMATION TESTING</customerName>
+	<dateOfBirth>01/01/1989</dateOfBirth>
+	<address>PO Box 911 8331 Duis Avenue</address>
+	<city>Tampa</city>
+</Customer>
