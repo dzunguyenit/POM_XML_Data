@@ -59,7 +59,7 @@ public class CommonTestcases {
 		return ExtentEmail.toString();
 	}
 
-	public static Element readXmlFile(String pathFileXml) {
+	public Element readXmlFile(String pathFileXml) {
 		Element nodeElement = null;
 		try {
 
@@ -90,7 +90,7 @@ public class CommonTestcases {
 		return nodeElement;
 	}
 
-	public static String getData(Element nodeElement, String value) {
+	public String getData(Element nodeElement, String value) {
 		return nodeElement.getElementsByTagName(value).item(0).getTextContent().trim();
 
 	}
