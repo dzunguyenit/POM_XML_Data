@@ -44,7 +44,7 @@ public class CommonTestcases {
 			options.addArguments("--disable-extendsions");
 			driver = new ChromeDriver();
 		} else if (browser.equals("firefox")) {
-			FirefoxDriverManager.getInstance().setup();
+			FirefoxDriverManager.getInstance().version(version).setup();
 			driver = new FirefoxDriver();
 		}
 		driver.get(url);
