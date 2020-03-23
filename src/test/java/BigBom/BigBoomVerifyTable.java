@@ -42,9 +42,8 @@ public class BigBoomVerifyTable {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button.sign-in")));
 		driver.findElement(By.cssSelector("button.sign-in")).click();
 
-//		wait.until(ExpectedConditions
-//				.visibilityOfElementLocated(By.xpath("//button[@aria-label='Close']")));
-//		driver.findElement(By.xpath("//button[@aria-label='C50lose']")).click();
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("//div[@class='ant-modal-body']//*[name()='svg']")).click();
 
 		int size = 50 / 10;
 		for (int i = 0; i < size; i++) {
