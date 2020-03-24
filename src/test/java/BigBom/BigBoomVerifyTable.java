@@ -45,6 +45,14 @@ public class BigBoomVerifyTable {
 		Thread.sleep(3000);
 		driver.findElement(By.xpath("//div[@class='ant-modal-body']//*[name()='svg']")).click();
 
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("span.icon-wrapper")));
+		driver.findElement(By.cssSelector("span.icon-wrapper")).click();
+
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("li[data-range-key='All time']")));
+		driver.findElement(By.cssSelector("li[data-range-key='All time']")).click();
+
+		Thread.sleep(3000);
+
 		int size = 50 / 10;
 		for (int i = 0; i < size; i++) {
 			wait.until(ExpectedConditions
