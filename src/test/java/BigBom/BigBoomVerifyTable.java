@@ -1,6 +1,9 @@
 package BigBom;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -53,23 +56,61 @@ public class BigBoomVerifyTable {
 
 		Thread.sleep(3000);
 
-		int size = 50 / 10;
-		for (int i = 0; i < size; i++) {
-			wait.until(ExpectedConditions
-					.visibilityOfElementLocated(By.cssSelector("div[class*=custom-footer] div[class=ant-table-body]")));
+		List<String> listNumber = new ArrayList<>();
 
-			EventFiringWebDriver scrollAction = new EventFiringWebDriver(driver);
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 5; j++) {
+				wait.until(ExpectedConditions.visibilityOfElementLocated(
+						By.cssSelector("div[class*=custom-footer] div[class=ant-table-body]")));
 
-			scrollAction.executeScript(
-					"document.querySelector('div[class*=custom-footer] div[class=ant-table-body]').scrollTop = 150000");
+				EventFiringWebDriver scrollAction = new EventFiringWebDriver(driver);
 
-			Thread.sleep(1500);
+				scrollAction.executeScript(
+						"document.querySelector('div[class*=custom-footer] div[class=ant-table-body]').scrollTop = 150000");
+
+				Thread.sleep(1500);
+			}
+
+			List<WebElement> listTextTmp = driver.findElements(By.xpath("//span[@class='amount-label__spent-text']"));
+
+			for (WebElement element : listTextTmp) {
+				String number = element.getText().replaceAll("₫", "");
+				String numberFormat = "";
+				if (number.contains(",")) {
+					numberFormat = number.replaceAll(",", "");
+				}
+				listNumber.add(numberFormat);
+			}
+
+			int sizePage = driver.findElements(By.xpath("//span[@class='amount-label__spent-text']")).size();
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("li[title='Next Page']")));
+			WebElement nextPageLbl = driver.findElement(By.cssSelector("li[title='Next Page']"));
+			if (sizePage == 50 && nextPageLbl.isEnabled()) {
+				nextPageLbl.click();
+			}
+
 		}
 
-		List<WebElement> listItems = driver.findElements(By.cssSelector("span[class='amount-label__spent-text']"));
-		int sizeListItems = listItems.size();
+		int sum = 0;
 
-		Assert.assertEquals(sizeListItems, 50);
+		for (int i = 0; i < listNumber.size(); i++) {
+			sum += Integer.parseInt(listNumber.get(i));
+		}
+		Assert.assertEquals(listNumber.size(), 148);
+
+		Assert.assertEquals(sum, "3976601621");
+
+	}
+
+	public String getTextRegex(String regex, String text, int group) {
+		String textRegex = "";
+		Pattern patternRegex = Pattern.compile(regex);
+		Matcher m = patternRegex.matcher(text);
+
+		if (m.find()) {
+			textRegex = m.group(group);
+		}
+		return textRegex.replaceAll(",", "");
 	}
 
 	@AfterClass

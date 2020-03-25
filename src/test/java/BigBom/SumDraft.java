@@ -24,6 +24,10 @@ public class SumDraft {
 		int finalSum = regexText1 + regexText2 + regexText3;
 
 		System.out.println("Tong la " + finalSum);
+
+		String number = "1,642,543";
+		String numbernew = number.replaceAll(",", "");
+		System.out.println("============Debug=== " + numbernew);
 	}
 
 	public static int getTextRegex(String regex, String text, int group) {
